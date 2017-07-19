@@ -2773,4 +2773,6 @@
     <string name="copy_to_clipboard">Copy to clipboard</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="error_share">Share</string>
+
+    <string name="status_bar_ims">VoLTE/VoWiFi</string>
 </resources>
