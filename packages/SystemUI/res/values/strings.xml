@@ -2768,4 +2768,6 @@
 
     <!-- Title for notification of low stylus battery. [CHAR_LIMIT=NONE] -->
     <string name="stylus_battery_low">Stylus battery low</string>
+    <!-- Face Unlock -->
+    <string name="face_unlock_recognizing">Recognizing face...</string>
 </resources>
