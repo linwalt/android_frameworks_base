@@ -239,7 +239,6 @@ public class PixelPropsUtils {
                     propsToChange.putAll(propsToChangePixelXL);
                 } else {
                     if (isPixelDevice) return;
-                    propsToChange.putAll(propsToChangePixel5);
                 }
             } else if (isPixelDevice) {
                 return;
@@ -252,7 +251,6 @@ public class PixelPropsUtils {
                 } else if (Arrays.asList(packagesToChangePixelXL).contains(packageName)) {
                     propsToChange.putAll(propsToChangePixelXL);
                 } else {
-                    propsToChange.putAll(propsToChangePixel5);
                 }
             }
 
@@ -362,7 +360,14 @@ public class PixelPropsUtils {
         }
     }
 
-    private static void setVersionField(String key, Integer value) {
+   public static void setVersionField(String key, String value) {
+        /*
+         * This would be much prettier if we just removed "final" from the Build fields,
+         * but that requires changing the API.
+         *
+         * While this an awful hack, it's technically safe because the fields are
+         * populated at runtime.
+         */
         try {
             // Unlock
             Field field = Build.VERSION.class.getDeclaredField(key);
@@ -374,16 +379,44 @@ public class PixelPropsUtils {
             // Lock
             field.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            Log.e(TAG, "Failed to spoof Build." + key, e);
+            Log.e(TAG, "Failed to spoof Version." + key, e);
         }
     }
 
-    private static void spoofBuildGms() {
+    public static void setVersionField(String key, int value) {
+        /*
+         * This would be much prettier if we just removed "final" from the Build fields,
+         * but that requires changing the API.
+         *
+         * While this an awful hack, it's technically safe because the fields are
+         * populated at runtime.
+         */
+        try {
+            // Unlock
+            Field field = Build.VERSION.class.getDeclaredField(key);
+            field.setAccessible(true);
+
+            // Edit
+            field.set(null, value);
+
+            // Lock
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            Log.e(TAG, "Failed to spoof Version." + key, e);
+        }
+    }
+
+    public static void spoofBuildGms() {
+        String stockSecurityPatch = SystemProperties.get("ro.build.stock_sec_patch", null);
+        Log.e(TAG, "Spoof Device GMS SECURITY_PATCH: [" + stockSecurityPatch + "]");
+            if( stockSecurityPatch != null && !stockSecurityPatch.isEmpty() )
+                setVersionField("SECURITY_PATCH", stockSecurityPatch);
+
         // Alter model name and fingerprint to avoid hardware attestation enforcement
-        setBuildField("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
-        setBuildField("PRODUCT", "marlin");
-        setBuildField("DEVICE", "marlin");
-        setBuildField("MODEL", "Pixel XL");
+        setBuildField("FINGERPRINT", "Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.3.0.QEJMIXM:user/release-keys");
+        setBuildField("PRODUCT", "beryllium");
+        setBuildField("DEVICE", "beryllium");
+        setBuildField("MODEL", "POCOPHONE F1");
         setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
     }
 
