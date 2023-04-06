@@ -39,6 +39,8 @@ import dalvik.system.BlockGuard;
 
 import libcore.io.IoUtils;
 
+import com.android.internal.baikalos.BaikalSpoofer;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedInputStream;
@@ -300,7 +302,8 @@ final class SharedPreferencesImpl implements SharedPreferences {
         synchronized (mLock) {
             awaitLoadedLocked();
             String v = (String)mMap.get(key);
-            return v != null ? v : defValue;
+            String result = v != null ? v : defValue;
+            return BaikalSpoofer.overrideStringSharedPreference(key, result);
         }
     }
 
@@ -310,7 +313,8 @@ final class SharedPreferencesImpl implements SharedPreferences {
         synchronized (mLock) {
             awaitLoadedLocked();
             Set<String> v = (Set<String>) mMap.get(key);
-            return v != null ? v : defValues;
+            Set<String> result = v != null ? v : defValues;
+            return BaikalSpoofer.overrideSetStringSharedPreference(key, result);
         }
     }
 
@@ -319,7 +323,8 @@ final class SharedPreferencesImpl implements SharedPreferences {
         synchronized (mLock) {
             awaitLoadedLocked();
             Integer v = (Integer)mMap.get(key);
-            return v != null ? v : defValue;
+            Integer result = v != null ? v : defValue;
+            return BaikalSpoofer.overrideIntegerSharedPreference(key, result);
         }
     }
     @Override
@@ -327,7 +332,8 @@ final class SharedPreferencesImpl implements SharedPreferences {
         synchronized (mLock) {
             awaitLoadedLocked();
             Long v = (Long)mMap.get(key);
-            return v != null ? v : defValue;
+            Long result = v != null ? v : defValue;
+            return BaikalSpoofer.overrideLongSharedPreference(key, result);
         }
     }
     @Override
@@ -335,7 +341,8 @@ final class SharedPreferencesImpl implements SharedPreferences {
         synchronized (mLock) {
             awaitLoadedLocked();
             Float v = (Float)mMap.get(key);
-            return v != null ? v : defValue;
+            Float result =  v != null ? v : defValue;
+            return BaikalSpoofer.overrideFloatSharedPreference(key, result);
         }
     }
     @Override
@@ -343,7 +350,8 @@ final class SharedPreferencesImpl implements SharedPreferences {
         synchronized (mLock) {
             awaitLoadedLocked();
             Boolean v = (Boolean)mMap.get(key);
-            return v != null ? v : defValue;
+            Boolean result = v != null ? v : defValue;
+            return BaikalSpoofer.overrideBooleanSharedPreference(key, result);
         }
     }
 
