@@ -53,25 +53,17 @@ public class BaikalSpoofer {
 
     private static String sPackageName = null;
     private static String sProcessName = null;
-
-    private static int sBaikalSpooferActive = 0;
+    
     
     public static void maybeSpoofProperties(Application app, Context context) {
-        sBaikalSpooferActive++;
         maybeSpoofBuild(app.getPackageName(), app.getProcessName(), context);
         maybeSpoofDevice(app.getPackageName(), context);
-    }
-
+     }   
+     
     public static int maybeSpoofFeature(String packageName, String name, int version) {
         if (packageName != null &&
                 packageName.contains("com.google.android.apps.photos") ) {
-                	setBuildField("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
-                    setBuildField("PRODUCT", "marlin");
-                    setBuildField("DEVICE", "marlin");
-                    setBuildField("MODEL", "Pixel XL");
-                    setBuildField("BRAND", "google");
-                    setBuildField("MANUFACTURER", "Google");
-                    
+
             Log.i(TAG, "App " + packageName + " is requested " + name + " feature with " + version + " version");
             if( name.contains("PIXEL_2021_EXPERIENCE") || name.contains("PIXEL_2022_EXPERIENCE") ) {
                 return 0;
@@ -192,11 +184,11 @@ public class BaikalSpoofer {
             "com.google.android.gms".equals(packageName) ) {
 
             sIsGmsUnstable = true;
-
+            sPreventHwKeyAttestation = true;
+            
             String stockFp = SystemProperties.get("ro.build.stock_fingerprint", null);
             String stockSecurityPatch = SystemProperties.get("ro.build.stock_sec_patch", null);
-
-            setBuildField("MODEL", Build.MODEL + "\u200b");
+            
             setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.S);
 
             setBuildField("FINGERPRINT", "Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.3.0.QEJMIXM:user/release-keys");
@@ -212,6 +204,19 @@ public class BaikalSpoofer {
         } else if( "com.android.vending".equals(packageName) ) {
             sIsFinsky = true;
         }
+    }
+    
+    private static void maybeSpoofDevice(String packageName, Context context) {
+    	if( packageName == null ) return;
+    	   if (packageName != null &&
+                packageName.contains("com.google.android.apps.photos") ) {
+                	setBuildField("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
+                    setBuildField("PRODUCT", "marlin");
+                    setBuildField("DEVICE", "marlin");
+                    setBuildField("MODEL", "Pixel XL");
+                    setBuildField("BRAND", "google");
+                    setBuildField("MANUFACTURER", "Google");
+                    }
     }
     
     public static boolean isPreventHwKeyAttestation() {
@@ -249,9 +254,5 @@ public class BaikalSpoofer {
         if(sPreventHwKeyAttestation) {
             throw new UnsupportedOperationException();
         } 
-    }
-
-    public static boolean isBaikalSpoofer() {
-        return sBaikalSpooferActive > 0;
     }
 }
