@@ -159,8 +159,7 @@ public class BaikalSpoofer {
         sProcessName = processName;
         sPackageName = packageName;
         
-        if( "com.google.android.gms.unstable".equals(processName) &&
-            "com.google.android.gms".equals(packageName) ) {
+           if( "com.google.android.gms".equals(packageName) ) {
 
             sIsGmsUnstable = true;
             sPreventHwKeyAttestation = true;
