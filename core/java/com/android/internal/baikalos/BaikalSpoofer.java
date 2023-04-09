@@ -164,8 +164,8 @@ public class BaikalSpoofer {
         } else if( "com.android.vending".equals(packageName) ) {
             sIsFinsky = true;
         }
-        return;
-        }
+
+}
     
     private static void maybeSpoofDevice(String packageName, Context context) {
     	if( packageName == null ) return;
