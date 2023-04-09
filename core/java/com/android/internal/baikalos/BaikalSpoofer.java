@@ -58,7 +58,8 @@ public class BaikalSpoofer {
     public static void maybeSpoofProperties(Application app, Context context) {
         maybeSpoofBuild(app.getPackageName(), app.getProcessName(), context);
         maybeSpoofDevice(app.getPackageName(), context);
-     }   
+        maybeSpoofStore(app.getPackageName(), context);
+    }        
      
     public static int maybeSpoofFeature(String packageName, String name, int version) {
         if (packageName != null &&
@@ -157,15 +158,24 @@ public class BaikalSpoofer {
     private static void maybeSpoofBuild(String packageName, String processName, Context context) {
 	    sProcessName = processName;
 	    sPackageName = packageName;
-	if( "com.google.android.gms".equals(packageName) ) {
-	       	spoofBuildgms();
-	       	sIsGmsUnstable = true;
-                sPreventHwKeyAttestation = true; 
-        } else if( "com.android.vending".equals(packageName) ) {
-            sIsFinsky = true;
-        }
-}
-
+	if( packageName == null ) return;
+    	   if (packageName != null &&
+                  "com.google.android.gms".equals(packageName) ) {
+                	spoofBuildgms();
+	       	     sIsGmsUnstable = true;
+	       	     sPreventHwKeyAttestation = true; 
+                	}
+            return;
+  }      
+    
+    private static void maybeSpoofStore(String packageName, Context context) {
+    	if( packageName == null ) return;
+    	   if (packageName != null &&
+                  "com.android.vending".equals(packageName) ) {
+                	sIsFinsky = true;
+                	}
+            return;
+      }
 
     private static void maybeSpoofDevice(String packageName, Context context) {
     	if( packageName == null ) return;
