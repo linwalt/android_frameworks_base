@@ -155,30 +155,17 @@ public class BaikalSpoofer {
     }
 
     private static void maybeSpoofBuild(String packageName, String processName, Context context) {
-
-        sProcessName = processName;
-        sPackageName = packageName;
-        
-           if( "com.google.android.gms".equals(packageName) ) {
-
-            sIsGmsUnstable = true;
-            sPreventHwKeyAttestation = true;
-            
-            
-  
-
-            setBuildField("FINGERPRINT", "Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.3.0.QEJMIXM:user/release-keys");
-            setBuildField("PRODUCT", "beryllium");
-            setBuildField("DEVICE", "beryllium");
-            setBuildField("MODEL", "POCOPHONE F1");
-
-                setVersionField("SECURITY_PATCH", "2020-12-01");
-                
-            return;                    
+	    sProcessName = processName;
+	    sPackageName = packageName;
+	if( "com.google.android.gms".equals(packageName) ) {
+	       	spoofBuildgms();
+	       	sIsGmsUnstable = true;
+                sPreventHwKeyAttestation = true; 
         } else if( "com.android.vending".equals(packageName) ) {
             sIsFinsky = true;
         }
-    }
+        return;
+        }
     
     private static void maybeSpoofDevice(String packageName, Context context) {
     	if( packageName == null ) return;
@@ -189,6 +176,13 @@ public class BaikalSpoofer {
             return;
       }
       
+	private static void spoofBuildgms() {
+    	       setBuildField("FINGERPRINT", "Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.3.0.QEJMIXM:user/release-keys");
+               setBuildField("PRODUCT", "beryllium");
+               setBuildField("DEVICE", "beryllium");
+               setBuildField("MODEL", "POCOPHONE F1");
+               setVersionField("SECURITY_PATCH", "2020-12-01");
+            }
     
       private static void spoofBuildph() {
                     setBuildField("FINGERPRINT", "google/marlin/marlin:10/QP1A.191005.007.A3/5972272:user/release-keys");
