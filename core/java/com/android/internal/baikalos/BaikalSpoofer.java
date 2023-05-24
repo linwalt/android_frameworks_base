@@ -163,6 +163,7 @@ public class BaikalSpoofer {
                   "com.google.android.gms".equals(packageName) ) {
 	       	     sIsGmsUnstable = true;
 	       	     sPreventHwKeyAttestation = true; 
+                     spoofBuildgms();
                 	}
             return;
   }      
@@ -186,11 +187,11 @@ public class BaikalSpoofer {
       }
       
 	private static void spoofBuildgms() {
-    	       setBuildField("FINGERPRINT", "Xiaomi/beryllium/beryllium:10/QKQ1.190828.002/V12.0.3.0.QEJMIXM:user/release-keys");
-               setBuildField("PRODUCT", "beryllium");
-               setBuildField("DEVICE", "beryllium");
-               setBuildField("MODEL", "POCOPHONE F1");
-               setVersionField("SECURITY_PATCH", "2020-12-01");
+                setBuildField("FINGERPRINT", "google/marlin/marlin:7.1.2/NJH47F/4146041:user/release-keys");
+                setBuildField("PRODUCT", "marlin");
+                setBuildField("DEVICE", "marlin");
+                setBuildField("MODEL", "Pixel XL");
+                setVersionField("DEVICE_INITIAL_SDK_INT", Build.VERSION_CODES.N_MR1);
             }
     
       private static void spoofBuildph() {
