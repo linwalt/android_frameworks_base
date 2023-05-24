@@ -17351,12 +17351,6 @@ public final class Settings {
                 "review_permissions_notification_state";
 
         /**
-         * The amount of time in milliseconds before a disconnected Wi-Fi adapter is turned off
-         * @hide
-         */
-        public static final String WIFI_OFF_TIMEOUT = "wifi_off_timeout";
-
-        /**
          * The amount of time in milliseconds before a disconnected Bluetooth adapter is turned off
          * @hide
          */
