@@ -17351,12 +17351,6 @@ public final class Settings {
                 "review_permissions_notification_state";
 
         /**
-         * Which server to use for Broadcom GNSS almanacs
-         * @hide
-         */
-        public static final String PSDS_SERVER = "psds_server";
-
-        /**
          * The amount of time in milliseconds before a disconnected Wi-Fi adapter is turned off
          * @hide
          */
