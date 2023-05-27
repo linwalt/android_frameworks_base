@@ -20,7 +20,6 @@ import android.annotation.NonNull;
 import android.annotation.SystemApi;
 import android.app.compat.gms.GmsCompat;
 
-import com.android.internal.app.ContactScopes;
 import com.android.internal.app.StorageScopesAppHooks;
 import com.android.internal.gmscompat.GmsHooks;
 
@@ -45,10 +44,6 @@ public class AppPermissionUtils {
             return true;
         }
 
-        if (ContactScopes.shouldSpoofSelfPermissionCheck(permName)) {
-            return true;
-        }
-
         if (GmsCompat.isEnabled()) {
             if (GmsHooks.config().shouldSpoofSelfPermissionCheck(permName)) {
                 return true;
@@ -65,10 +60,6 @@ public class AppPermissionUtils {
     /** @hide */
     public static boolean shouldSpoofSelfAppOpCheck(int op) {
         if (StorageScopesAppHooks.shouldSpoofSelfAppOpCheck(op)) {
-            return true;
-        }
-
-        if (ContactScopes.shouldSpoofSelfAppOpCheck(op)) {
             return true;
         }
 
@@ -93,13 +84,6 @@ public class AppPermissionUtils {
     private static int getSpoofablePermissionDflag(GosPackageState ps, String perm) {
         if (ps.hasFlag(FLAG_STORAGE_SCOPES_ENABLED)) {
             int permDflag = StorageScopesAppHooks.getSpoofablePermissionDflag(perm);
-            if (permDflag != 0) {
-                return permDflag;
-            }
-        }
-
-        if (ps.hasFlag(FLAG_CONTACT_SCOPES_ENABLED)) {
-            int permDflag = ContactScopes.getSpoofablePermissionDflag(perm);
             if (permDflag != 0) {
                 return permDflag;
             }

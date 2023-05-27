@@ -9,7 +9,6 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.android.internal.app.ContactScopes;
 import com.android.internal.app.StorageScopesAppHooks;
 
 import java.util.Objects;
@@ -65,7 +64,6 @@ class ActivityThreadHooks {
     static void onGosPackageStateChanged(Context ctx, @Nullable GosPackageState state, boolean fromBind) {
         if (state != null) {
             StorageScopesAppHooks.maybeEnable(state);
-            ContactScopes.maybeEnable(ctx, state);
         }
     }
 }
