@@ -49,8 +49,8 @@ import com.android.server.pm.PackageManagerService;
  */
 public final class GosPackageStatePm extends GosPackageStateBase {
 
-    public GosPackageStatePm(int flags, @Nullable byte[] storageScopes, @Nullable byte[] contactScopes) {
-        super(flags, storageScopes, contactScopes);
+    public GosPackageStatePm(int flags, @Nullable byte[] storageScopes) {
+        super(flags, storageScopes);
     }
 
     @Nullable
@@ -111,13 +111,9 @@ public final class GosPackageStatePm extends GosPackageStateBase {
         var ps = get(pm, packageName, userId);
 
         if (ps != null) {
-            return ps.edit(packageName, userId);
+            return new GosPackageState.Editor(ps, packageName, userId);
         }
 
         return new GosPackageState.Editor(packageName, userId);
-    }
-
-    public GosPackageState.Editor edit(String packageName, int userId) {
-        return new GosPackageState.Editor(this, packageName, userId);
     }
 }
