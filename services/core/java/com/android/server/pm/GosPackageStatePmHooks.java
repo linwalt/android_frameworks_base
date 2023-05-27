@@ -530,7 +530,6 @@ public class GosPackageStatePmHooks {
                             FIELD_STORAGE_SCOPES));
 
             final int settingsReadFlags = FLAG_STORAGE_SCOPES_ENABLED
-                        | FLAG_CONTACT_SCOPES_ENABLED
                         | FLAG_ALLOW_ACCESS_TO_OBB_DIRECTORY
                         | FLAG_DISABLE_HARDENED_MALLOC
                         | FLAG_ENABLE_COMPAT_VA_39_BIT;
