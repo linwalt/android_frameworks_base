@@ -932,9 +932,6 @@ final class DefaultPermissionGrantPolicy {
 
         String[] notifPackages = {
             "com.android.contacts",
-            "app.grapheneos.apps",
-            "app.grapheneos.camera",
-            "app.attestation.auditor",
             "com.stevesoltys.seedvault",
         };
         for (String pkg : notifPackages) {
