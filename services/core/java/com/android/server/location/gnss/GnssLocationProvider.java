@@ -61,7 +61,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.ext.settings.ExtSettings;
-import android.ext.settings.GnssConstants;
 import android.ext.settings.IntSetting;
 import android.location.GnssCapabilities;
 import android.location.GnssStatus;
@@ -493,18 +492,6 @@ public class GnssLocationProvider extends AbstractLocationProvider implements
         };
 
         ExtSettings.GNSS_SUPL.registerObserver(mContext, suplSettingObserver, mHandler);
-
-        if (ExtSettings.isStandardGnssPsds(mContext)) {
-            Consumer<IntSetting> psdsSettingObserver = setting -> {
-                Slog.d(TAG, "PSDS setting changed, value: " + setting.get(mContext));
-                if (!isPsdsEnabled()) {
-                    Slog.d(TAG, "PSDS is disabled");
-                }
-                reloadGpsProperties();
-            };
-
-            ExtSettings.GNSS_PSDS_STANDARD.registerObserver(mContext, psdsSettingObserver, mHandler);
-        }
     }
 
     /** Called when system is ready. */
@@ -598,7 +585,7 @@ public class GnssLocationProvider extends AbstractLocationProvider implements
     private void onNetworkAvailable() {
         mNtpTimeHelper.onNetworkAvailable();
         // Download only if supported, (prevents an unnecessary on-boot download)
-        if (mSupportsPsds && isPsdsEnabled()) {
+        if (mSupportsPsds && isAssistedGpsEnabled()) {
             synchronized (mLock) {
                 for (int psdsType : mPendingDownloadPsdsTypes) {
                     postWithWakeLockHeld(() -> handleDownloadPsdsData(psdsType));
@@ -693,8 +680,9 @@ public class GnssLocationProvider extends AbstractLocationProvider implements
             Log.d(TAG, "handleDownloadPsdsData() called when PSDS not supported");
             return;
         }
-        if (!isPsdsEnabled()) {
-            Log.d(TAG, "handleDownloadPsdsData() called when PSDS is disabled");
+        if (!isAssistedGpsEnabled()) {
+            // PSDS download disabled by system setting, don't try
+            Log.d(TAG, "handleDownloadPsdsData() called when PSDS disabled by system setting");
             return;
         }
         if (!mNetworkConnectivityHandler.isDataNetworkConnected()) {
@@ -1777,8 +1765,12 @@ public class GnssLocationProvider extends AbstractLocationProvider implements
                 isCachedLocation);
     }
 
-    private boolean isPsdsEnabled() {
-        return ExtSettings.isStandardGnssPsds(mContext) &&
-                ExtSettings.GNSS_PSDS_STANDARD.get(mContext) != GnssConstants.PSDS_DISABLED;
+    private boolean isAssistedGpsEnabled() {
+        final Boolean isEmergency = mNIHandler.getInEmergency();
+        if (isEmergency) {
+            Log.i(TAG, "Forcing Assisted GPS due to emergency");
+        }
+        return (Settings.Global.getInt(mContext.getContentResolver(),
+                        Settings.Global.ASSISTED_GPS_ENABLED, 0) != 0) || isEmergency;
     }
 }
