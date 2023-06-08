@@ -17,8 +17,6 @@
 package com.android.server.location.gnss;
 
 import android.content.Context;
-import android.ext.settings.ExtSettings;
-import android.ext.settings.GnssConstants;
 import android.os.PersistableBundle;
 import android.os.SystemProperties;
 import android.telephony.CarrierConfigManager;
@@ -26,7 +24,6 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Slog;
 
 import com.android.internal.util.FrameworkStatsLog;
 
@@ -279,8 +276,6 @@ public class GnssConfiguration {
         loadPropertiesFromGpsDebugConfig(mProperties);
         mEsExtensionSec = getRangeCheckedConfigEsExtensionSec();
 
-        applyConfigOverrides(mContext, mProperties);
-
         logConfigurations();
 
         final HalInterfaceVersion gnssConfigurationIfaceVersion = getHalInterfaceVersion();
@@ -481,23 +476,4 @@ public class GnssConfiguration {
     private static native boolean native_set_satellite_blocklist(int[] constellations, int[] svIds);
 
     private static native boolean native_set_es_extension_sec(int emergencyExtensionSeconds);
-
-    private static void applyConfigOverrides(Context ctx, Properties props) {
-        final int suplMode = ExtSettings.GNSS_SUPL.get(ctx);
-
-        switch (suplMode) {
-            case GnssConstants.SUPL_SERVER_STANDARD:
-                Slog.d(TAG, "SUPL: using the standard server");
-                break;
-            case GnssConstants.SUPL_DISABLED:
-                Slog.d(TAG, "SUPL is disabled");
-                props.setProperty(CONFIG_SUPL_MODE, "0");
-                break;
-            case GnssConstants.SUPL_SERVER_GRAPHENEOS_PROXY:
-                Slog.d(TAG, "SUPL: using the GrapheneOS proxy");
-                props.setProperty(CONFIG_SUPL_HOST, "supl.grapheneos.org");
-                props.setProperty(CONFIG_SUPL_PORT, "7275");
-                break;
-        }
-    }
 }
